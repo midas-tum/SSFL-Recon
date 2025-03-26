@@ -1,8 +1,6 @@
 # SSFL-Recon
 
-**Self-supervised Feature Learning for Cardiac Cine MR Image Reconstruction**
-
-> Official Tensorflow implementation of our paper.
+> Official Tensorflow implementation of our paper: **Self-supervised Feature Learning for Cardiac Cine MR Image Reconstruction**
 
 ✏️ **Authors**: Siying Xu, Marcel Früh, Kerstin Hammernik, Andreas Lingg, Jens Kübler, Patrick Krumm, Daniel Rueckert, Sergios Gatidis, and Thomas Küstner  
 
