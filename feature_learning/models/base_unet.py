@@ -62,11 +62,11 @@ class BaseComplexUNet2Dt(tf.keras.Model):
 
     def build_bottleneck(self, **kwargs):
         stage = []
-        filters = self.filters * (2 ** (self.num_level))
+        filters = self.filters * (2 ** (self.num_levels))
         for ilayer in range(self.layers_per_level):
             stage += self.conv_block(filters, self.kernel_size_2d)
             stage += self.conv_block(filters, self.kernel_size_t)
-        stage.append(self.up_layer(self.filters * (2 ** (self.num_level - 1)), (1, 1, 1), strides=self.pool_size,
+        stage.append(self.up_layer(self.filters * (2 ** (self.num_levels - 1)), (1, 1, 1), strides=self.pool_size,
                                    use_bias=self.use_bias, activation=self.activation, padding='same', **kwargs))
         return stage
 
@@ -154,4 +154,13 @@ class BaseComplexUNet2Dt(tf.keras.Model):
                 x = self.pad_layer(inputs, optotf_pad, self.padding)
         else:
             x = inputs
+        return x
+
+    def apply_crop(self, inputs, x):
+        if self.use_padding:
+            if self.pad is None:  # input shape cannot be determined or fixed before compile
+                pad, _ = self.calculate_padding_tensor(inputs)
+            else:
+                pad = self.pad
+            x = self.crop_layer(pad)(x)
         return x
