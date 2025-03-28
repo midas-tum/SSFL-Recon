@@ -4,10 +4,10 @@ import time
 import datetime
 import tensorflow as tf
 
-from SSFL_rebuttal.organized_code.utils.callbacks import get_callbacks
-from SSFL_rebuttal.organized_code.feature_learning.losses.contrastive_loss import get_loss
-from SSFL_rebuttal.organized_code.feature_learning.models.contrastive_feature_model import UNET2dt
-from SSFL_rebuttal.organized_code.data_loader.feature_contrastive_data_dummy import DummyCINE2DDataset
+from utils.callbacks import get_callbacks
+from feature_learning.losses.contrastive_loss import get_loss
+from feature_learning.models.contrastive_feature_model import UNET2dt
+from data_loader.feature_contrastive_data_dummy import DummyCINE2DDataset
 
 
 def train_feature_learning(num_iter, fold='contrastive_feature'):
