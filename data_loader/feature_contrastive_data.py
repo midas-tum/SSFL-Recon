@@ -24,14 +24,10 @@ class CINE2DDataset(tf.keras.utils.Sequence):
         # To optionally use disjoint datasets for the two-stage training:
         # The CSV files are expected to contain: filename, nFE, nPE, COIL_DIM, TIME_DIM, SLICE_DIM
         if self.split:
-            if self.mode == 'train_feature':
+            if self.mode == 'train':
                 data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_train_feature.csv')
-            elif self.mode == 'train_recon':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_train_recon.csv')
-            elif self.mode == 'val_feature':
+            elif self.mode == 'val' or self.mode == 'test':
                 data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_val_feature.csv')
-            elif self.mode == 'val_recon':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_val_recon.csv')
         else:
             if self.mode == 'train':
                 data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_train.csv')
