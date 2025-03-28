@@ -89,7 +89,7 @@ class CINE2DDataset(tf.keras.utils.Sequence):
         batch_imgc_pos = norm_imgc_pos[slidx_pos]  # (1, 25, x, y, 1)
         batch_imgc_neg = norm_imgc_neg[slidx_neg]
 
-        # load coil-compressed time-averaged coil sensitivity maps, (nSlices, 25, x, y, 15)
+        # load coil-compressed time-averaged coil sensitivity maps, (nSlices, 1, x, y, 15)
         cc_smap_pos = np.load('cc_smap_15_%s.txt.npy' % fname_pos)
         cc_smap_neg = np.load('cc_smap_15_%s.txt.npy' % fname_neg)
         batch_smaps_pos = cc_smap_pos[slidx_pos]  # (1, 1, x, y, 15)
