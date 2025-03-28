@@ -7,7 +7,7 @@ import tensorflow as tf
 class BaseComplexUNet2Dt(tf.keras.Model):
     def __init__(self, filters=64, num_levels=4, layers_per_level=2, activation='ModReLU', activation_last=None,
                  kernel_size_2d=(1, 3, 3), kernel_size_t=(3, 1, 1), pool_size=(2, 2, 2), use_bias=True,
-                 output_channel=1, name='BaseUNet3D', padding='none', **kwargs):
+                 output_channel=1, name='BaseComplexUNet2Dt', padding='none', **kwargs):
         super().__init__(name=name)
 
         self.filters = filters
