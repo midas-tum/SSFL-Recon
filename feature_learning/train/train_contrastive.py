@@ -12,7 +12,7 @@ from data_loader.feature_contrastive_data import CINE2DDataset
 
 def train_feature_learning(min_R, max_R, num_iter, R_neg_range='diff', split=None, fold='contrastive_feature'):
     ds_train = CINE2DDataset(min_R, max_R, R_neg_range, mode='train', split=split, shuffle=True)
-    ds_val = CINE2DDataset(min_R, max_R, R_neg_range, mode='val', shuffle=False)
+    ds_val = CINE2DDataset(min_R, max_R, R_neg_range, mode='val', split=split, shuffle=False)
 
     model = UNET2dt(num_iter=num_iter, mode='train')
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.0004)
