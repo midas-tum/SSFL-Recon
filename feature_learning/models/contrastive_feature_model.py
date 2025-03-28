@@ -4,6 +4,7 @@ from .mlp import get_MLP
 from .encoder_unet import FeatureEncoderUNet
 from .decoder_unet import FeatureDecoderUNet
 from utils.layers import Scalar, get_dc_layer
+from utils.basic_functions import complex_scale
 
 
 def get_encoder():
@@ -57,10 +58,13 @@ class UNET2dt(tf.keras.Model):
 
         if self.mode == 'pred':
             x, y, mask, smap = inputs
-            feature1, _ = self.feature_pred(x, y, mask, smap, num_i=0)
-            feature2, _ = self.feature_pred(x, y, mask, smap, num_i=1)
-            feature3, _ = self.feature_pred(x, y, mask, smap, num_i=2)
-            return feature1, feature2, feature3
+
+            features = []
+            for i in range(self.S_end):
+                feature, x = self.feature_pred(x, y, mask, smap, num_i=i)
+                features.append(feature)
+
+            return features
 
     def feature_train(self, x, y, mask, smaps, num_i):
         r, xforward = self.encoder[num_i](x)
@@ -78,7 +82,7 @@ class UNET2dt(tf.keras.Model):
             out_decoder = self.decoder[num_i]([x, r, xforward])
 
             # residual connection (residual UNet)
-            x = x - out_decoder * self.tau[num_i](1.0 / self.S_end)
+            x = x - complex_scale(self.tau[num_i](out_decoder), 1 / self.S_end)
 
             # data consistency
             x = self.dc[num_i]([x, y, mask, smaps])
@@ -87,8 +91,8 @@ class UNET2dt(tf.keras.Model):
 
 
     def feature_pred(self, x, y, mask, smaps, num_i):
-        h_encoder, xforward = self.encoder[num_i](x)
-        h_decoder = self.decoder[num_i]([x, h_encoder, xforward])
-        x = x - h_decoder * self.tau[num_i](1.0 / self.S_end)
-        x = self.dc[num_i]([x, y, mask, smaps])
-        return h_encoder, x
+        feature, xforward = self.encoder[num_i](x)
+        out_decoder = self.decoder[num_i]([x, feature, xforward])
+        x = x - complex_scale(self.tau[num_i](out_decoder), 1 / self.S_end)
+        x = self.dc[num_i]([x] + [y, mask, smaps])
+        return feature, x
