@@ -6,7 +6,8 @@ from utils.mri import MulticoilForwardOp
 from utils.layers import Scalar, get_dc_layer
 from utils.basic_functions import complex_scale
 from .feature_assisted_unet import FeatureComplexUNet2Dt
-from feature_learning.models.contrastive_feature_model import UNET2dt as feature_extractor
+from feature_learning.models.VICReg_feature_model import UNET2dt as feature_extractor_v
+from feature_learning.models.contrastive_feature_model import UNET2dt as feature_extractor_c
 
 
 def get_recon_net():
@@ -14,11 +15,12 @@ def get_recon_net():
                                  kernel_size_t=(3, 1, 1), pool_size=(2, 2, 2), activation_last=None)
 
 
-class SSFL_Recon_c(tf.keras.Model):
-    def __init__(self, num_iter, mode, name="SSFL_Recon_c", pretrained_weights=None):
+class SSFL_Recon(tf.keras.Model):
+    def __init__(self, num_iter, mode, feature_learning, name="SSFL_Recon", pretrained_weights=None):
         super().__init__(name=name)
         self.S_end = num_iter
         self.mode = mode
+        self.FE = feature_learning
         self.dc = []
         self.tau = []
         self.recon_unet = []
@@ -29,14 +31,21 @@ class SSFL_Recon_c(tf.keras.Model):
             self.recon_unet.append(get_recon_net())
 
         # Load pre-trained feature extractor
-        self.feature_extractor = feature_extractor(num_iter=num_iter, mode='pred')
+        if self.FE == 'contrastive':
+            self.feature_extractor = feature_extractor_c(num_iter=num_iter, mode='pred')
+        elif self.FE == 'vicreg':
+            self.feature_extractor = feature_extractor_v(num_iter=num_iter, mode='pred')
+        else:
+            raise ValueError(f"Invalid feature extractor type '{self.FE}'. "
+                             f"Supported options are: 'contrastive', 'vicreg'.")
+
         if pretrained_weights is not None:
             print('---------------------- setting pre-trained FE ----------------------')
             self.feature_extractor.load_weights(pretrained_weights)
             for layer in self.feature_extractor.layers:
                 layer.trainable = False
         else:
-            print("!!! Pretrained weights not found or not provided. !!!")
+            print(" Pretrained weights not found or not provided. Using randomly initialized encoder.")
 
     def update_x(self, x, y, mask, smaps, feature, num_i):
         den = self.recon_unet[num_i]([x, feature])
@@ -46,6 +55,7 @@ class SSFL_Recon_c(tf.keras.Model):
 
     def ssl_recon_loss(self, x1, x2, y1, y2, mask_1, mask_2, smaps):
         # image consistency loss between x1, x2
+        # image loss between x1, x2
         x1 = tf.cast(x1, tf.complex64)
         x2 = tf.cast(x2, tf.complex64)
         diff = (x1 - x2)
@@ -71,7 +81,7 @@ class SSFL_Recon_c(tf.keras.Model):
             feature_representations_1 = self.feature_extractor([x1, y1, mask_1, smaps])
             feature_representations_2 = self.feature_extractor([x2, y2, mask_2, smaps])
 
-            # feature-assisted self-supervised reconstruction, directly calculate loss during training
+            # feature-assisted self-supervised reconstruction
             for i in range(self.S_end):
                 x1 = self.update_x(x1, y1, mask_1, smaps, feature_representations_1[i], i)
                 x2 = self.update_x(x2, y2, mask_2, smaps, feature_representations_2[i], i)
