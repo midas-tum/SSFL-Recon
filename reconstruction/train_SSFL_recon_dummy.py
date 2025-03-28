@@ -6,9 +6,9 @@ import tensorflow as tf
 
 from utils import callbacks
 from .recon_loss import get_loss
-from .feature_assisted_unet import FeatureComplexUNet2Dt
-from .recon_model_contrastive_feature import SSFL_Recon_c
+from .recon_model import SSFL_Recon
 from data_loader.recon_data_dummy import DummyCINE2DDataset
+from .feature_assisted_unet import FeatureComplexUNet2Dt
 
 
 def get_recon_net():
@@ -21,7 +21,7 @@ def train_SSFL_recon(num_iter, fold='SSFL_Recon'):
     ds_train = DummyCINE2DDataset()
     ds_val = DummyCINE2DDataset()
 
-    model = SSFL_Recon_c(num_iter=num_iter, mode='train', pretrained_weights='./dummy_weights/weights001.tf')
+    model = SSFL_Recon(num_iter=num_iter, mode='train', feature_learning='vicreg', pretrained_weights='./dummy_weights/weights001.tf')
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.0004)
     model.compile(optimizer, loss=get_loss('img_ksp_loss'), run_eagerly=True)
 
