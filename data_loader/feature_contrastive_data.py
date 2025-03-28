@@ -132,9 +132,9 @@ class CINE2DDataset(tf.keras.utils.Sequence):
                 R_3 = random.randint(self.min_R, self.max_R)
                 sd_3 = random.randint(1, 20)
 
-        mask_1 = np.loadtxt("/home/studxusiy1/mr_recon/masks/mask_VISTA_%dx%d_acc%d_%d.txt" % (p_pos, 25, R_1, sd_1), dtype=int, delimiter=",")  # (y, 25)
-        mask_2 = np.loadtxt("/home/studxusiy1/mr_recon/masks/mask_VISTA_%dx%d_acc%d_%d.txt" % (p_pos, 25, R_2, sd_2), dtype=int, delimiter=",")  # (y, 25)
-        mask_3 = np.loadtxt("/home/studxusiy1/mr_recon/masks/mask_VISTA_%dx%d_acc%d_%d.txt" % (p_neg, 25, R_3, sd_3), dtype=int, delimiter=",")  # (y, 25)
+        mask_1 = np.loadtxt("mask_VISTA_%dx%d_acc%d_%d.txt" % (p_pos, 25, R_1, sd_1), dtype=int, delimiter=",")  # (y, 25)
+        mask_2 = np.loadtxt("mask_VISTA_%dx%d_acc%d_%d.txt" % (p_pos, 25, R_2, sd_2), dtype=int, delimiter=",")  # (y, 25)
+        mask_3 = np.loadtxt("mask_VISTA_%dx%d_acc%d_%d.txt" % (p_neg, 25, R_3, sd_3), dtype=int, delimiter=",")  # (y, 25)
 
         mask_1 = np.expand_dims(np.transpose(mask_1), (0, 2, 4))  # (1, 25, 1, y, 1)
         mask_2 = np.expand_dims(np.transpose(mask_2), (0, 2, 4))
