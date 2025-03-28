@@ -84,8 +84,8 @@ class CINE2DDataset(tf.keras.utils.Sequence):
 
         # load normalized fully-sampled images, value range [0, 1]
         # shape: (nSlices, frequency encoding steps, phase encoding steps, coils) = (nSlices, 25, x, y, 15)
-        norm_imgc_pos = np.load('cc_img_%s.txt.npy' % fname_pos)
-        norm_imgc_neg = np.load('cc_img_%s.txt.npy' % fname_neg)
+        norm_imgc_pos = np.load('norm_img_%s.txt.npy' % fname_pos)
+        norm_imgc_neg = np.load('norm_img_%s.txt.npy' % fname_neg)
         batch_imgc_pos = norm_imgc_pos[slidx_pos]  # (1, 25, x, y, 1)
         batch_imgc_neg = norm_imgc_neg[slidx_neg]
 
