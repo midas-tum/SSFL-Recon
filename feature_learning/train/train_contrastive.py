@@ -5,8 +5,8 @@ import datetime
 import tensorflow as tf
 
 from utils.callbacks import get_callbacks
-from .losses.contrastive_loss import get_loss
-from .models.contrastive_feature_model import UNET2dt
+from feature_learning.losses.contrastive_loss import get_loss
+from feature_learning.models.contrastive_feature_model import UNET2dt
 from data_loader.feature_contrastive_data import CINE2DDataset
 
 
