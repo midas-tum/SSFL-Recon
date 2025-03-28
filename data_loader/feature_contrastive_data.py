@@ -25,14 +25,14 @@ class CINE2DDataset(tf.keras.utils.Sequence):
         # The CSV files are expected to contain: filename, nFE, nPE, COIL_DIM, TIME_DIM, SLICE_DIM
         if self.split:
             if self.mode == 'train':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_train_feature.csv')
+                data_set = pd.read_csv('dataset/CINE2D_h5_train_feature.csv')
             elif self.mode == 'val' or self.mode == 'test':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_val_feature.csv')
+                data_set = pd.read_csv('dataset/CINE2D_h5_val_feature.csv')
         else:
             if self.mode == 'train':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_train.csv')
+                data_set = pd.read_csv('dataset/CINE2D_h5_train.csv')
             elif self.mode == 'val' or self.mode == 'test':
-                data_set = pd.read_csv('/home/studxusiy1/mr_recon/03_cine2dt/subj_dataset/CINE2D_h5_val.csv')
+                data_set = pd.read_csv('dataset/CINE2D_h5_val.csv')
 
         self.data_set = []
         for i in range(len(data_set)):
