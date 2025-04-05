@@ -55,7 +55,6 @@ class SSFL_Recon(tf.keras.Model):
 
     def ssl_recon_loss(self, x1, x2, y1, y2, mask_1, mask_2, smaps):
         # image consistency loss between x1, x2
-        # image loss between x1, x2
         x1 = tf.cast(x1, tf.complex64)
         x2 = tf.cast(x2, tf.complex64)
         diff = (x1 - x2)
