@@ -109,12 +109,11 @@ class CINE2DDataset(tf.keras.utils.Sequence):
 
         # Generate re-undersampling masks for creating the positive pair: M1 & M2
         R_1 = random.randint(self.min_R, self.max_R)
-        R_2 = random.randint(self.min_R, self.max_R)
+        R_2 = R_1
         sd_1 = random.randint(1, 20)
         sd_2 = random.randint(1, 20)
         # Make sure M1 and M2 are different
-        while R_1 == R_2 and sd_2 == sd_1:
-            R_2 = random.randint(self.min_R, self.max_R)
+        while sd_2 == sd_1:
             sd_2 = random.randint(1, 20)
 
         # Generate undersampling mask M3 for creating the negative pair
