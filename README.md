@@ -32,6 +32,9 @@ SSFL-Recon/
 │   ├── recon_data.py
 │   └── recon_data_dummy.py
 │
+├── evaluation/
+│   ├── metrics.py                  # MSE, NRMSE, PSNR, SSIM
+│
 ├── feature_learning/               # Feature learning step
 │   ├── losses/                     # Contrastive/VICReg loss functions
 │   │   ├── contrastive_loss.py
