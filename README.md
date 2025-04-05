@@ -24,45 +24,45 @@ SSFL-Recon is a two-stage framework for MR image reconstruction using self-super
 
 ```bash
 SSFL-Recon/
-├── data_loader/                    # Data loading modules
-│   ├── feature_contrastive_data.py
-│   ├── feature_contrastive_data_dummy.py
-│   ├── feature_vicreg_data.py
-│   ├── feature_vicreg_data_dummy.py
-│   ├── recon_data.py
+├── data_loader/                              # Data loading modules
+│   ├── feature_contrastive_data.py           # Data pipeline for contrastive feature learning
+│   ├── feature_contrastive_data_dummy.py  
+│   ├── feature_vicreg_data.py                # Data pipeline for VICReg feature learning
+│   ├── feature_vicreg_data_dummy.py          
+│   ├── recon_data.py                         # Data pipeling for reconstruction
 │   └── recon_data_dummy.py
 │
 ├── evaluation/
-│   ├── metrics.py                  # MSE, NRMSE, PSNR, SSIM
+│   ├── metrics.py                            # NRMSE, PSNR, SSIM
 │
-├── feature_learning/               # Feature learning step
-│   ├── losses/                     # Contrastive/VICReg loss functions
+├── feature_learning/                         # Feature learning step
+│   ├── losses/                               # Contrastive/VICReg loss functions
 │   │   ├── contrastive_loss.py
 │   │   └── vicreg_loss.py
-│   ├── models/                     # UNet encoders, MLP heads, model configs
-│   │   ├── base_unet.py
+│   ├── models/                               
+│   │   ├── VICReg_feature_model.py           # model for VICReg feature learning
+│   │   ├── base_unet.py                      # base complex 2D+t UNet
+│   │   ├── contrastive_feature_model.py      # model for contrastive feature learning
+│   │   ├── decoder_unet.py                  
 │   │   ├── encoder_unet.py
-│   │   ├── decoder_unet.py
-│   │   ├── mlp.py
-│   │   ├── contrastive_feature_model.py
-│   │   └── VICReg_feature_model.py
-│   └── train/                      # Training scripts
-│       ├── train_contrastive.py
+│   │   └── mlp.py                            # multi-layer perceptron
+│   └── train/                                # Training scripts (feature learning step)
+│       ├── train_contrastive.py                                 
 │       ├── train_contrastive_dummy.py
 │       ├── train_vicreg.py
 │       └── train_vicreg_dummy.py
 │
-├── reconstruction/                # Feature-assisted self-supervised reconstruction
-│   ├── dummy_weights/             # Pretrained encoder weights (dummy)
+├── reconstruction/                           # Feature-assisted self-supervised reconstruction
+│   ├── dummy_weights/                        # Pretrained feature extractor (FE-Net) weights (dummy)
 │   │   ├── weights001.tf.data-00000-of-00001
 │   │   └── weights001.tf.index
 │   ├── recon_model.py           
 │   ├── feature_assisted_unet.py  
 │   ├── recon_loss.py             
-│   ├── train_SSFL_recon.py        # Main training script
-│   └── train_SSFL_recon_dummy.py  # Dummy training script
+│   ├── train_SSFL_recon.py                   # Main training script
+│   └── train_SSFL_recon_dummy.py             # Dummy training script
 │
-├── utils/                         # Utility functions
+├── utils/                                    # Utility functions
 │   ├── basic_functions.py
 │   ├── callbacks.py
 │   ├── data_consistency.py
