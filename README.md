@@ -74,6 +74,19 @@ SSFL-Recon/
 
 ---
 
+## 🧩 Dependencies
+
+This code was developed and tested using the following versions:
+
+- Python 3.7
+- TensorFlow 2.6.0
+- Keras 2.6.0 (bundled with TF 2.6.0)
+- NumPy, Pandas, Matplotlib, scikit-image, etc.
+
+**Important**: This project depends on the [merlintf](https://github.com/midas-tum/merlin) library, which is not available on PyPI. Please install it manually with the build instructions on the GitHub.
+
+---
+
 ## 🧪 Dummy Test (No real dataset required)
 You can run the entire feature learning + reconstruction pipeline with dummy data and dummy pre-trained weights:
 
