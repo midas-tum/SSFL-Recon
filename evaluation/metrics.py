@@ -1,23 +1,13 @@
 
 import numpy as np
-import tensorflow as tf
-
-
-def compute_mse(gt, pred):
-    """
-    :param gt: ground truth, shape: (batch, time, x, y, coil), dtype: complex64
-    :param pred: prediction, shape: (batch, time, x, y, coil), dtype: complex64
-    :return: Mean squared error over spatial-temporal dimensions, averaged over batch and coil.
-    """
-    diff = tf.cast(gt - pred, tf.complex64)
-    return np.mean(np.sum(tf.math.real(tf.math.conj(diff) * diff), axis=(2, 3, 4)), axis=(0, 1))
+from skimage import metrics
 
 
 def nrmse(gt, pred):
     """
     :param gt: ground truth, shape: (batch, time, x, y, coil), dtype: complex64
     :param pred: prediction, shape: (batch, time, x, y, coil), dtype: complex64
-    :return: Normalized RMSE over spatial dimension, averaged over time.
+    :return: Normalized RMSE, averaged over time
     """
 
     T = gt.shape[1]
@@ -65,3 +55,23 @@ def psnr(gt, pred, data_range=None, reduce=True):
         return np.mean(psnr_list)
     else:
         return psnr_list
+
+
+def SSIM(gt, pred):
+    """
+    :param gt: ground truth, shape: (batch, time, x, y, coil), dtype: complex64
+    :param pred: prediction, shape: (batch, time, x, y, coil), dtype: complex64
+    :return: SSIM averaged over time
+    """
+    
+    T = gt.shape[1]
+    ssim_list = []
+    
+    for t in range(T):
+        # calculate on the absolute image
+        gt_t = np.abs(gt[0, t, :, :, 0])
+        pred_t = np.abs(pred[0, t, :, :, 0])
+        ssim_i = metrics.structural_similarity(gt_t, pred_t, data_range=np.max(gt_t))
+        ssim_list.append(ssim_i)
+        
+    return np.mean(ssim_list)
